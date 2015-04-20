@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# Writes wakeup time from /var/run/wakeup or from command line argument to RTC
+#
+# example usage: 
+#  rtcwakeup `date --date='5 minutes' +%s`
+
+# Default values
+WAKEALARMDEVICE="/sys/class/rtc/rtc0/wakealarm"
+WAKEALARMDRIVER="/proc/driver/rtc"
+WAKEALARM_DEBUG="false"
+WAKEALARMFILE="/var/run/wakeup"
+
+wakealarm() {
+  logger -t rtcwakeup "Current RTC time is    `date -u +%s`"
+  logger -t rtcwakeup "Setting wakeup time to $1"
+
+  echo 0 > ${WAKEALARMDEVICE}
+  echo $1 > ${WAKEALARMDEVICE}
+
+  if ${WAKEALARM_DEBUG}; then
+    logger -t rtcwakeup Current time in UTC: `date -u`
+    logger -t rtcwakeup Wakeup time set to: `grep alrm_t $WAKEALARMDRIVER`
+    logger -t rtcwakeup Wakeup time set to: `grep alrm_d $WAKEALARMDRIVER`
+    logger -t rtcwakeup Wakeup time set to: `grep alrm_p $WAKEALARMDRIVER`
+  fi
+}
+
+if [ -r /etc/default/rtcwakeup ];then
+  . /etc/default/rtcwakeup
+fi
+
+logger -t rtcwakeup Saving RTC wakeup information
+
+if [ "$#" -eq 1 ]; then
+  wakealarm $1
+else
+  if [ -e $WAKEALARMFILE ]; then
+    wakealarm `cat $WAKEALARMFILE`
+  fi
+fi

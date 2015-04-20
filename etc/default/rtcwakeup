@@ -1,0 +1,8 @@
+# for writing value into rtc by /usr/local/bin/rtcwakeup
+WAKEALARMDEVICE="/sys/class/rtc/rtc0/wakealarm"
+WAKEALARMDRIVER="/proc/driver/rtc"
+WAKEALARM_DEBUG="true"
+WAKEALARMFILE="/var/run/wakeup"
+
+# for vdr helper script
+WAKEALARM_BEFORE="300"
