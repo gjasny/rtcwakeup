@@ -36,8 +36,7 @@ WAKEALARMFILE="/var/run/wakeup"
 [ -r /etc/default/rtcwakeup ] && . /etc/default/rtcwakeup
 
 TIME=$(expr $1 - $WAKEALARM_BEFORE)
-echo "SHUTDOWNCMD=systemctl poweroff"
-logger -t vdr S01 $TIME
+echo "SHUTDOWNCMD=\"systemctl poweroff\""
 
 ## power key pressed
 if [ $5 -eq 1 ];then
@@ -52,3 +51,4 @@ if [ -e /etc/vdr/enable_autoshutdown ];then
 fi
 
 exit 1
+
