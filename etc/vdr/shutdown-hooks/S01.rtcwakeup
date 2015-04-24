@@ -32,11 +32,12 @@
 # defaul values
 WAKEALARM_BEFORE="300"
 WAKEALARMFILE="/var/run/wakeup"
+SHUTDOWNCMD="logger -t vdr-shutdown Shutdown placeholder from S01.rtcwakeup. edit /etc/default/rtcwakeup to enable shutdown"
 
 [ -r /etc/default/rtcwakeup ] && . /etc/default/rtcwakeup
 
 TIME=$(expr $1 - $WAKEALARM_BEFORE)
-echo "SHUTDOWNCMD=\"systemctl poweroff\""
+echo "SHUTDOWNCMD=\"$SHUTDOWNCMD\""
 
 ## power key pressed
 if [ $5 -eq 1 ];then
